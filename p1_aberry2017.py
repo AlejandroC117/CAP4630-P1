@@ -3,6 +3,7 @@
 
 #Alex Berry – Z23442156
 #Alejandro Carvajal – Z23595816
+#6/17/2022 - Project 1 : Game playing using easyAI
 
 from easyAI import TwoPlayerGame, Human_Player, AI_Player, Negamax
 from easyAI import solve_with_iterative_deepening
