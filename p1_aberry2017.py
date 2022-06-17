@@ -1,5 +1,9 @@
 # [[file:checker.org::*questions][questions:1]]
 # !/usr/bin/env python3
+
+#Alex Berry – Z23442156
+#Alejandro Carvajal – Z23595816
+
 from easyAI import TwoPlayerGame, Human_Player, AI_Player, Negamax
 from easyAI import solve_with_iterative_deepening
 import numpy as np
@@ -141,9 +145,6 @@ class Checker(TwoPlayerGame):
         return table_pos
 
     def possible_moves(self):
-        """
-        """
-
         if self.current_player == 2:
             return self.possible_moves_on_black_turn()
         else:
@@ -161,80 +162,52 @@ class Checker(TwoPlayerGame):
         return [(i,j) for i,j in zip(x[0], x[1])]
 
     def make_move(self, pos):
-        """
-        assign pieces index of pos array to current player position.
-
-        parameters
-        -------
-        pos = position of all pieces on the (8 x 8) boards. type numpy array.
-
-        example of pos
-        [[0,B,0,B,0,B,0,B],
-         [B,0,B,0,B,0,B,0],
-         [0,0,0,0,0,0,0,0],
-         [0,0,0,0,0,0,0,0],
-         [0,0,0,0,0,0,0,0],
-         [0,W,0,W,0,W,0,W],
-         [W,0,W,0,W,0,W,0]]
-        ------
-        """
-        #print(type(pos))
-        #print(pos[:].shape)
+        #Witdh of the Game Board
         x = pos[0,:].shape[0]
+        #Height of the Game Board
         y = pos[:,0].shape[0]
-        #print(x)
-        #print(y)
+        #Checking if the current player is player 1
+        #Then we will use the updated position, pos
+        #and update the white pieces.
         if self.current_player == 1:
             self.white_pieces.clear()
             for i in range(x):
                 for j in range(y):
                     if pos[i,j] == "W":
                         self.white_pieces.append([i,j])
+        #Checking if the current player is player 2
+        #Then we will use the updated position, pos
+        #and update the black pieces.
         elif self.current_player == 2:
             self.black_pieces.clear()
-            for i in range(8):
-                for j in range(8):
+            for i in range(x):
+                for j in range(y):
                     if pos[i,j] == "B":
                         self.black_pieces.append([i,j])
-        #print(self.white_pieces)
-        #print("Done")
-        """
-        old_piece = (pos[0],pos[1])
-        new_piece = (pos[2],pos[4])
-        if self.current_player-1 == 0:
-            if self.board[old_piece] == "W":
-                valid_moves = self.possible_moves_on_white_turn
-                for (x,y) in valid_moves:
-                    if valid_moves[old_piece] == "0" and valid_moves[new_piece] == "W":
-                        self.board[old_piece] = "0"
-                        self.board[new_piece] = "W"
-        elif self.current_player-1 == 1:
-            if self.board[old_piece] == "B":
-                valid_moves = self.possible_moves_on_black_turn
-                for (x,y) in valid_moves:
-                    if valid_moves[old_piece] == "0" and valid_moves[new_piece] == "B":
-                        self.board[old_piece] = "0"
-                        self.board[new_piece] = "B"
-        """
-
+        #For the previous two sections, we only need to
+        #update the current player's pieces as no player
+        #can remove the opponet's peices
     def lose(self):
-        """
-        black lose if white piece is in black territory
-        white lose if black piece is in black territory
-        """
         #White Player
+        #Checks if any black piece is in white territory
         if self.current_player-1 == 0:
             for i,j in self.white_territory:
                 if self.board[i,j] == "B":
                     return True
         #Black Player
+        #Checks if any white piece is in white territory
         elif self.current_player-1 == 1:
             for i,j in self.black_territory:
                 if self.board[i,j] == "W":
                     return True
+        #The function returns false if the current
+        #player has not lost
         return False
 
     def is_over(self):
+        #The function returns true if the current
+        #player has lost or if there are no more
+        #possible moves
         return (self.possible_moves() == []) or self.lose()
         pass
 
@@ -254,16 +227,26 @@ class Checker(TwoPlayerGame):
         print(board)
 
     def scoring(self):
+       #The function return -100, 
+       #if the current player losses
        if self.lose():
            return -100 
+       #Returns 0 if the black player
+       #has any of their peices in
+       #white territory (win)
        elif self.current_player-1 == 1:
            for i,j in self.white_territory:
                if self.board[i,j] == "B":
                    return 0
+       #Returns 0 if the white player
+       #has any of their peices in
+       #black territory (win) 
        elif self.current_player-1 == 0:
            for i,j in self.black_territory:
                if self.board[i,j] == "W":
                    return 0
+       #Returns 0 if no condition was
+       #accomplished
        return 0
 
 if __name__ == "__main__":
